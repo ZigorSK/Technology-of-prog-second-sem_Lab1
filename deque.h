@@ -3,7 +3,7 @@
 #include"node_deque.h"
 #include<iostream>
 #include<iomanip>
-//ไý๊
+//ะดัะบ
 // left_p <->... prev_p(node)next_p...<-> right_p
 using namespace std;
 class deque :public Base
