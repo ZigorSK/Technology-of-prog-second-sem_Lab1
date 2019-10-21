@@ -25,5 +25,5 @@ public:
 	void show() override;//
 	void menu() override;
 	void write_of_file(ofstream &fout);
-
+ 
 };
