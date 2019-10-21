@@ -24,4 +24,3 @@ public:
 	Base *get_struct_of_data() { return struct_of_data; };
 
 };
-
