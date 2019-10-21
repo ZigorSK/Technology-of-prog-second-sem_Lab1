@@ -1,5 +1,5 @@
 #pragma once
-//Список
+//РЎРїРёСЃРѕРє
 #include"Base.h"
 #include"node_list.h"
 #include"iostream"
@@ -13,7 +13,7 @@ class list :public Base
 	int size;
 public:
 	list() :head(nullptr), size(0) {};
-	list(int d) :head(nullptr)//парамет конструктора единственный новый элемент списка
+	list(int d) :head(nullptr)//РїР°СЂР°РјРµС‚ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° РµРґРёРЅСЃС‚РІРµРЅРЅС‹Р№ РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР°
 	{
 		
 		size = 0;
@@ -28,7 +28,7 @@ public:
 
 	};
 
-	list(const list &A);//НАписать
+	list(const list &A);//РќРђРїРёСЃР°С‚СЊ
 	~list();
 
 	void set_head(node_list *h) { head = h; };
