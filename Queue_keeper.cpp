@@ -1,5 +1,16 @@
 #include "Queue_keeper.h"
 
+queue_keeper::queue_keeper(const queue_keeper & obg)
+{
+	node_queue *ptr = obg.end_ptr;
+
+	while (ptr)
+	{
+		add(ptr->get_struct_of_data()->say_my_name());//создаёт пустые оъекты внутри новой очереди(Не копирует данные)
+		ptr = ptr->get_prev_ptr();
+	}
+}
+
 queue_keeper::~queue_keeper()
 {
 	node_queue *ptr = end_ptr;
@@ -22,7 +33,7 @@ void queue_keeper::add(char c)
 		ptr->set_prev_ptr( end_ptr );
 		end_ptr = ptr;
 	}
-	else//Р”РѕР±Р°РІР»РµРЅРёРµ РїРµСЂРІРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РІ РѕС‡РµСЂРµРґСЊ
+	else//Добавление первого элемента в очередь
 	{
 		end_ptr = new node_queue(c);
 		end_ptr->set_prev_ptr(nullptr);
@@ -31,8 +42,8 @@ void queue_keeper::add(char c)
 
 void queue_keeper::del(void)
 {
-	//Р•СЃР»Рё РІ СѓР·Р»Рµ prev_ptr = nullptr, С‚Рѕ РґР°РЅРЅС‹Р№ СѓР·РµР» РІ РѕС‡РµСЂРµРґРё - СЌР»РµРјРµРЅС‚ РЅР° РІС‹С…РѕРґРµ
-	if (end_ptr != nullptr)//РµСЃР»Рё РІ РѕС‡РµСЂРµРґРё РµСЃС‚СЊ СЌР»РµРјРµРЅС‚С‹
+	//Если в узле prev_ptr = nullptr, то данный узел в очереди - элемент на выходе
+	if (end_ptr != nullptr)//если в очереди есть элементы
 	{
 		node_queue *ptr = end_ptr, *next_ptr = end_ptr;
 
@@ -43,9 +54,9 @@ void queue_keeper::del(void)
 			ptr = ptr->get_prev_ptr();
 		}
 
-		if (ptr != end_ptr)//Р’ РѕС‡РµСЂРµРґРё Р±РѕР»СЊС€Рµ РѕРґРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°
+		if (ptr != end_ptr)//В очереди больше одного элемента
 		{
-			cout << "РР· РѕС‡РµСЂРµРґРё РёР·СЉСЏС‚ СЌР»РµРјРµРЅС‚ -  ";
+			cout << "Из очереди изъят элемент -  ";
 			char c = ptr->get_struct_of_data()->say_my_name();
 			if (c == 's')
 			{
@@ -67,9 +78,9 @@ void queue_keeper::del(void)
 			delete ptr;
 			next_ptr->set_prev_ptr( nullptr);
 		}
-		else//Р’ РѕС‡РµСЂРµРґРё РѕСЃС‚Р°Р»СЃСЏ 1 СЌР»РµРјРµРЅС‚
+		else//В очереди остался 1 элемент
 		{
-			cout << "РР· РѕС‡РµСЂРµРґРё РёР·СЉСЏС‚ СЌР»РµРјРµРЅС‚ -  ";
+			cout << "Из очереди изъят элемент -  ";
 			char c = ptr->get_struct_of_data()->say_my_name();
 			if (c == 's')
 			{
@@ -95,7 +106,7 @@ void queue_keeper::del(void)
 	}
 	else
 	{
-		cout << "Р’ РѕС‡РµСЂРµРґРё РЅРµС‚ РЅРё РѕРґРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°!!!" << endl;
+		cout << "В очереди нет ни одного элемента!!!" << endl;
 	}
 }
 
@@ -103,7 +114,7 @@ void queue_keeper::show()
 {
 	node_queue *ptr = end_ptr;
 
-	cout << setw(15) << "РљРѕРЅРµС† РѕС‡РµСЂРµРґРё";
+	cout << setw(15) << "Конец очереди";
 	cout << setw(5) << "|" << endl;
 
 	while (ptr)
@@ -112,7 +123,7 @@ void queue_keeper::show()
 		ptr = ptr->get_prev_ptr();
 		cout << endl << endl << endl;
 	}
-	cout << setw(15) << "РќР°С‡Р°Р»Рѕ РѕС‡РµСЂРµРґРё";
+	cout << setw(15) << "Начало очереди";
 	cout << setw(5) << "V" << endl;
 }
 
@@ -142,7 +153,7 @@ void queue_keeper::menu(int num)
 	}
 	catch (int num)
 	{
-		cout << "Р’ РѕС‡РµСЂРµРґРё РЅРµС‚ СЌР»РµРјРµРЅС‚Р° СЃ С‚Р°РєРёРј РЅРѕРјРµСЂРѕРј!!!" << endl;
+		cout << "В очереди нет элемента с таким номером!!!" << endl;
 		system("pause");
 	}
 }
@@ -150,33 +161,32 @@ void queue_keeper::menu(int num)
 void queue_keeper::read_from_file()
 {
 	int flag, dat = 0, arr[10000], count = 0;
-	ifstream input("file_of_data.txt");
+	ifstream input;
 	node_queue *ptr = end_ptr;
 	char c, simv;
 
-	cout << "РҐРѕС‚РёС‚Рµ Р»Рё С„Р°Р№Р» РѕС‚ СЃС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С…?" << endl << "[1] Р”Р°." << endl << "[0] РќРµС‚." << endl;
+	cout << "Хотите ли очистить файл от считанных данных?" << endl << "[1] Да." << endl << "[0] Нет." << endl;
 	cin >> flag;
 
 	try
 	{
-		input.open("file_of_data.txt");
+		input.open("file_of_data.txt", std::ios::in);
 		if (!input.is_open())
 			throw(flag);
 
-		while (ptr)
-		{
-			ptr = ptr->get_prev_ptr();
-		}
+
 
 		do
 		{
 			input >> c;
+			if (input.eof())
+				break;
 			do
 			{
 				input >> simv;
 				if (simv == '>')
 				{
-					input >> simv;//for endl
+					//input >> simv;//for endl
 					break;
 				}
 
@@ -186,23 +196,25 @@ void queue_keeper::read_from_file()
 
 			} while (1);
 
-			//РІРЅРѕСЃРёРј РґР°РЅРЅС‹Рµ РІ СЃС‚СЂСѓС‚СѓСЂСѓ РґР°РЅРЅС‹С…
+			//вносим данные в струтуру данных
 			if (c == 's')//stack
 			{
 				add('s');
-				ptr = ptr->get_prev_ptr();
+				ptr = end_ptr;
 
 				for (int i = 0; i < count; i++)
 				{
-					ptr->get_struct_of_data()->add(arr[count - i], 0);
+					ptr->get_struct_of_data()->add(arr[count - i-1], 0);
 				}
 			}
 			else
 			{
 				if (c == 'd')//deque
 				{
-					add('s');
-					ptr = ptr->get_prev_ptr();
+					add('d');
+					ptr = end_ptr;
+
+
 					for (int i = 0; i < count; i++)
 					{
 						ptr->get_struct_of_data()->add(arr[i], 1);
@@ -213,7 +225,9 @@ void queue_keeper::read_from_file()
 					if (c == 'l')
 					{
 						add('l');
-						ptr = ptr->get_prev_ptr();
+
+						ptr = end_ptr;
+
 						for (int i = 0; i < count; i++)
 						{
 							ptr->get_struct_of_data()->add(arr[i], i + 1);
@@ -221,14 +235,15 @@ void queue_keeper::read_from_file()
 					}
 					else
 					{
-						cout << "Р’ С„Р°Р№Р»Рµ РЅРµРІРµСЂРЅРѕ СѓРєР°Р·Р°РЅ С‚РёРї СЃС‚СЂСѓРєС‚СѓСЂС‹ РґР°РЅРЅС‹С…!!!" << endl;
+						cout << "В файле неверно указан тип структуры данных!!!" << endl;
 						system("pause");
 						system("cls");
 					}
 				}
 			}
+			c == 'a';
 			count = 0;
-		} while (input);
+		} while (!input.eof());
 
 		
 			input.close();
@@ -243,7 +258,7 @@ void queue_keeper::read_from_file()
 	}
 	catch (int flag)
 	{
-		cout << "Р’С‹Р·РІР°РЅРѕ РёСЃРєР»СЋС‡РµРЅРёРµ, РЅРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р»" << endl;
+		cout << "Вызвано исключение, не удалось открыть файл" << endl;
 		system("pause");
 		system("cls");
 	}
@@ -251,13 +266,25 @@ void queue_keeper::read_from_file()
 
 }
 
+queue_keeper & queue_keeper::operator--()
+{
+	del();
+	return *this;
+}
+
+queue_keeper & queue_keeper::operator+(char c)
+{
+	add(c);
+	return *this;
+}
+
 void queue_keeper::write_of_file()
 {
 	ofstream fout;
-	int flag;
+	int flag, count = 0;
 	node_queue *ptr = end_ptr;
-	//РҐРѕС‚РёС‚Рµ Р»Рё С„Р°Р№Р» РѕС‚ РїСЂРµРґС‹РґСѓС‰РёС… РґР°РЅРЅС‹С…?
-	cout << "РҐРѕС‚РёС‚Рµ Р»Рё С„Р°Р№Р» РѕС‚ РїСЂРµРґС‹РґСѓС‰РёС… РґР°РЅРЅС‹С…?" << endl << "[1] Р”Р°." << endl << "[0] РќРµС‚." << endl;
+	//Хотите ли файл от предыдущих данных?
+	cout << "Хотите ли очистить файл от предыдущих данных?" << endl << "[1] Да." << endl << "[0] Нет." << endl;
 	cin >> flag;
 	try
 	{
@@ -273,27 +300,42 @@ void queue_keeper::write_of_file()
 			if (!fout.is_open())
 				throw(flag);
 		}
-
 		while (ptr)
 		{
+			count++;
+			ptr = ptr->get_prev_ptr();
+		}
+
+
+
+		while (count)
+		{
+			ptr = end_ptr;
+			for (int i = 0; i < count-1; i++)
+			{
+				ptr = ptr->get_prev_ptr();
+			}
 			fout << ptr->get_struct_of_data()->say_my_name();
-			//Р·Р°РїРёСЃСЊ РІСЃРµС… РґР°РЅРЅС‹С… СЃС‚СЂСѓРєС‚СѓСЂС‹ РґР°РЅРЅС‹С…
+			//запись всех данных структуры данных
 			fout << "<";
 		    ptr->get_struct_of_data()->write_of_file(fout);
 			fout << ">";
 			//
 			fout << endl;
-			ptr = ptr->get_prev_ptr();
-			
+			count--;
 		}
 		fout.close();
 	}
 	catch (int flag)
 	{
-		cout << "Р’С‹Р·РІР°РЅРѕ РёСЃРєР»СЋС‡РµРЅРёРµ, РЅРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р»" << endl;
+		cout << "Вызвано исключение, не удалось открыть файл" << endl;
 		system("pause");
 		system("cls");
 	}
 }
 
-
+queue_keeper & operator+(char c, queue_keeper & obg)
+{
+	obg.add(c);
+	return obg;
+}

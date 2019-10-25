@@ -72,6 +72,8 @@ int deque::del(int flag)//flag = 1 - delete elem of right, flag = 0 - delete ele
 		 d = head->get_data();
 		delete head;
 		head = nullptr;
+		cout << "Èç äýêà èçâëå÷¸í ýëåìåíò" << d << endl;
+		system("pause");
 		return d;
 	}
 
@@ -89,6 +91,8 @@ int deque::del(int flag)//flag = 1 - delete elem of right, flag = 0 - delete ele
 		d = ptr2->get_data();
 		delete ptr2;
 		ptr1->set_next_ptr(nullptr);
+		cout << "Èç äýêà èçâëå÷¸í ýëåìåíò" << d << endl;
+		system("pause");
 		return d;
 	}
 	else//del left elem
@@ -98,6 +102,8 @@ int deque::del(int flag)//flag = 1 - delete elem of right, flag = 0 - delete ele
 		d = head->get_data();
 		delete head;
 		head = ptr;
+		cout << "Èç äýêà èçâëå÷¸í ýëåìåíò" << d << endl;
+		system("pause");
 		return d;
 	}
 }
@@ -122,18 +128,18 @@ void deque::menu()
 
 	do
 	{
-		cout << "[1] Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ Ð² Ð´ÑÐº." << endl << "[2] Ð˜Ð·Ð²Ð»ÐµÑ‡ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð¸Ð· Ð´ÑÐºÐ°." << endl << "[3] Ð’Ñ‹Ð²Ð¾Ð´ Ð´ÑÐºÐ° Ð½Ð° ÑÐºÑ€Ð°Ð½."
-			<< endl << "[0] Ð’Ñ‹Ñ…Ð¾Ð´ Ð¸Ð· Ð¼ÐµÐ½ÑŽ Ð´ÑÐºÐ°." << endl;
+		cout << "[1] Äîáàâèòü ýëåìåíò â äýê." << endl << "[2] Èçâëå÷åíèå ýëåìåíòà èç äýêà." << endl << "[3] Âûâîä äýêà íà ýêðàí."
+			<< endl << "[0] Âûõîä èç ìåíþ äýêà." << endl;
 		cin >> choice;
 
 		switch (choice)
 		{
 		case 1:
 			system("cls");
-			cout << "[1] Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° ÑÐ¿Ñ€Ð°Ð²Ð°." << endl << "[0] Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° ÑÐ»ÐµÐ²Ð°." << endl;
+			cout << "[1] Äîáàâëåíèå ýëåìåíòà ñïðàâà." << endl << "[0] Äîáàâëåíèå ýëåìåíòà ñëåâà." << endl;
 			cin >> flag;
 
-			cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚ÑŒ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ, Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼Ð¾Ðµ Ð² Ð´ÑÐº" << endl;
+			cout << "Ââåäèòü çíà÷åíèå, äîáàâëÿåìîå â äýê" << endl;
 			cin >> dat;
 
 			add(dat, flag);
@@ -144,7 +150,7 @@ void deque::menu()
 		case 2:
 
 			system("cls");
-			cout << "[1] Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° ÑÐ¿Ñ€Ð°Ð²Ð°." << endl << "[0] Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° ÑÐ»ÐµÐ²Ð°." << endl;
+			cout << "[1] Óäàëåíèå ýëåìåíòà ñïðàâà." << endl << "[0] Óäàëåíèå ýëåìåíòà ñëåâà." << endl;
 			cin >> flag;
 			del(flag);
 			system("pause");
@@ -158,7 +164,7 @@ void deque::menu()
 
 		case 0:
 			break;
-		default: cout << "Ð’Ð²ÐµÐ´ÐµÐ½Ð° Ð½ÐµÐ¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð°Ñ ÐºÐ¾Ð¼Ð°Ð½Ð´Ð°!!!!" << endl;
+		default: cout << "Ââåäåíà íåïðàâèëüíàÿ êîìàíäà!!!!" << endl;
 			system("pause");
 			break;
 
@@ -181,12 +187,12 @@ void deque::write_of_file(ofstream & fout)
 			ptr = ptr->get_next_ptr();
 			if (ptr == nullptr)
 				break;
-			fout << " ";
+			fout << "|";
 		}
 	}
 	catch (node_deque *ptr)
 	{
-		cout << "Ð’Ñ‹Ð·Ð²Ð°Ð½Ð¾ Ð¸ÑÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ. Ð”ÑÐº Ð¿ÑƒÑÑ‚. Ð’ Ñ„Ð°Ð¹Ð» Ð¾Ð½ Ð·Ð°Ð¿Ð¸ÑÐ°Ð½ Ð½Ðµ Ð±ÑƒÐ´ÐµÑ‚. Ð’Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ð¿Ñ€Ð¾Ð´Ð¾Ð»Ð¶Ð¸Ñ‚ÑÑ." << endl;
+		cout << "Âûçâàíî èñêëþ÷åíèå. Äýê ïóñò. Â ôàéë îí çàïèñàí íå áóäåò. Âûïîëíåíèå ïðîãðàììû ïðîäîëæèòñÿ." << endl;
 		system("pause");
 		system("cls");
 	}

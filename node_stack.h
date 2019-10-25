@@ -6,7 +6,7 @@ class node_stack
 	int data;
 	node_stack *next_ptr;
 public:
-	node_stack() : data(0), next_ptr(nullptr) {};//РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+	node_stack() : data(0), next_ptr(nullptr) {};//Конструктор по умолчанию
 	node_stack(const node_stack &obg);
 
 	//getters

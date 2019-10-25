@@ -16,7 +16,7 @@ stack::stack(const stack & obg)
 		ptr = ptr->get_next_ptr();
 	}
 	arr = new double[count];
-	ptr = obg.hight_stack_ptr;//Р·Р°РїРёСЃС‹РІР°РµРј Р·РЅР°С‡РµРЅРёСЏ СЃС‚СЌРєР° РІ РјР°СЃСЃРёРІ 1 СЌР» -РґРЅРѕ РїРѕСЃР»РµРґРЅРёР№ - РІРµСЂС…СѓС€РєР°
+	ptr = obg.hight_stack_ptr;//записываем значения стэка в массив 1 эл -дно последний - верхушка
 	for (int i = 0; i < (count); i++)
 	{
 		*(arr + count - i - 1) = ptr->get_data();
@@ -48,7 +48,7 @@ stack::~stack()
 void stack::add(int d, int flag = 0)
 {
 
-	if (hight_stack_ptr != nullptr)//Р•СЃР»Рё СЂР°РЅРµРµ Р±С‹Р»Рё РґРѕР±Р°РІР»РµРЅС‹ СЌР»РµРјРµРЅС‚С‹
+	if (hight_stack_ptr != nullptr)//Если ранее были добавлены элементы
 	{
 		node_stack *ptr = nullptr;
 
@@ -58,7 +58,7 @@ void stack::add(int d, int flag = 0)
 		ptr->set_data(d);
 		hight_stack_ptr = ptr;
 	}
-	else//Р•СЃР»Рё РґРѕР±Р°РІР»СЏРµРјС‹Р№ СЌР»РµРјРµРЅС‚ РїРµСЂРІС‹Р№
+	else//Если добавляемый элемент первый
 	{
 		hight_stack_ptr = new node_stack;
 		hight_stack_ptr->set_next_ptr(nullptr);
@@ -68,31 +68,29 @@ void stack::add(int d, int flag = 0)
 
 int stack::del(int m = 0)
 {
+	int d = 0;
 	try
 	{
-		if (hight_stack_ptr != nullptr)//Р•СЃР»Рё СЌР»РµРјРµРЅС‚С‹ РµС‰С‘ РµСЃС‚СЊ
-			throw(hight_stack_ptr);
-
-		int d = 0;
-
+		if (hight_stack_ptr == nullptr)//Если элементы ещё есть
+			throw d;
 		
-			d = hight_stack_ptr->get_data();
-			cout << "Р­Р»РµРјРµРЅС‚ " << d << "РР·РІР»РµС‡С‘РЅ РёР· СЃС‚СЌРєР°" << endl;
-			node_stack *ptr = hight_stack_ptr->get_next_ptr();
+		d = hight_stack_ptr->get_data();
+		cout << "Элемент " << d << "Извлечён из стэка" << endl;
+		node_stack *ptr = hight_stack_ptr->get_next_ptr();
 
-			delete hight_stack_ptr;
-			hight_stack_ptr = ptr;
+		delete hight_stack_ptr;
+		hight_stack_ptr = ptr;
 		
 		return d;
 	}
-	catch (node_stack hight_stack_ptr)
+	catch (int d)
 	{
-		cout << "Р’ СЃС‚СЌРєРµ Р±РѕР»СЊС€Рµ РЅРµС‚ СЌР»РµРјРµРЅС‚РѕРІ!!!" << endl;	
+		cout << "В стэке больше нет элементов!!!" << endl;	
 	}
 }
 
 
-void stack::show()//Р’С‹РІРѕРґ СЃС‚СЌРєР° РЅР° СЌРєСЂР°РЅ
+void stack::show()//Вывод стэка на экран
 {
 	node_stack *ptr = hight_stack_ptr;
 
@@ -113,15 +111,15 @@ void stack::menu()
 
 	do
 	{
-		cout << "[1] Р”РѕР±Р°РІРёС‚СЊ СЌР»РµРјРµРЅС‚ РІ СЃС‚СЌРє." << endl << "[2] РР·РІР»РµС‡РµРЅРёРµ СЌР»РµРјРµРЅС‚Р° РёР· СЃС‚СЌРєР°." << endl << "[3] Р’С‹РІРѕРґ СЃС‚СЌРєР° РЅР° СЌРєСЂР°РЅ."
-	         << endl << "[0] Р’С‹С…РѕРґ РёР· РјРµРЅСЋ СЃС‚СЌРєР°." << endl;
+		cout << "[1] Добавить элемент в стэк." << endl << "[2] Извлечение элемента из стэка." << endl << "[3] Вывод стэка на экран."
+	         << endl << "[0] Выход из меню стэка." << endl;
 		cin >> choice;
 
 		switch (choice)
 		{
 		case 1:
 			system("cls");
-			cout << "Р’РІРµРґРёС‚СЊ Р·РЅР°С‡РµРЅРёРµ, РґРѕР±Р°РІР»СЏРµРјРѕРµ РІ СЃС‚СЌРє" << endl;
+			cout << "Введить значение, добавляемое в стэк" << endl;
 			cin >> dat;
 
 			add(dat);
@@ -144,7 +142,7 @@ void stack::menu()
 	
 		case 0:
 			break;
-		default: cout << "Р’РІРµРґРµРЅР° РЅРµРїСЂР°РІРёР»СЊРЅР°СЏ РєРѕРјР°РЅРґР°!!!!" << endl;
+		default: cout << "Введена неправильная команда!!!!" << endl;
 			system("pause");
 			break;
 
@@ -166,13 +164,13 @@ void stack::write_of_file(ofstream &fout)
 			ptr = ptr->get_next_ptr();
 			if (ptr == nullptr)
 				break;
-			fout << " ";
+			fout << "|";
 
 		}
 	}
 	catch (node_stack *ptr)
 	{
-		cout << "Р’С‹Р·РІР°РЅРѕ РёСЃРєР»СЋС‡РµРЅРёРµ. РЎС‚СЌРє РїСѓСЃС‚. Р’ С„Р°Р№Р» РѕРЅ Р·Р°РїРёСЃР°РЅ РЅРµ Р±СѓРґРµС‚. Р’С‹РїРѕР»РЅРµРЅРёРµ РїСЂРѕРіСЂР°РјРјС‹ РїСЂРѕРґРѕР»Р¶РёС‚СЃСЏ." << endl;
+		cout << "Вызвано исключение. Стэк пуст. В файл он записан не будет. Выполнение программы продолжится." << endl;
 		system("pause");
 		system("cls");
 	}
