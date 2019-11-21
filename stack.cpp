@@ -158,6 +158,9 @@ void stack::write_of_file(ofstream &fout)
 	{
 		if (ptr == nullptr)
 			throw(ptr);
+
+		fout << "<";
+
 		while (1)
 		{
 			fout << ptr->get_data();
@@ -165,14 +168,13 @@ void stack::write_of_file(ofstream &fout)
 			if (ptr == nullptr)
 				break;
 			fout << "|";
-
 		}
+
+		fout << ">";
 	}
 	catch (node_stack *ptr)
 	{
-		cout << "Вызвано исключение. Стэк пуст. В файл он записан не будет. Выполнение программы продолжится." << endl;
-		system("pause");
-		system("cls");
+		fout << "_";
 	}
 
 }

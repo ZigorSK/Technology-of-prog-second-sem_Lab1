@@ -114,8 +114,9 @@ void queue_keeper::show()
 {
 	node_queue *ptr = end_ptr;
 
-	cout << setw(15) << "Конец очереди";
+	cout << setw(15) << "End of queue:";
 	cout << setw(5) << "|" << endl;
+	cout << endl;
 
 	while (ptr)
 	{
@@ -123,7 +124,7 @@ void queue_keeper::show()
 		ptr = ptr->get_prev_ptr();
 		cout << endl << endl << endl;
 	}
-	cout << setw(15) << "Начало очереди";
+	cout << setw(15) << "Begin of queue";
 	cout << setw(5) << "V" << endl;
 }
 
@@ -153,7 +154,7 @@ void queue_keeper::menu(int num)
 	}
 	catch (int num)
 	{
-		cout << "В очереди нет элемента с таким номером!!!" << endl;
+		cout << "В очереди нет элемента с номером " <<num<<"!"<< endl;
 		system("pause");
 	}
 }
@@ -163,7 +164,7 @@ void queue_keeper::read_from_file()
 	int flag, dat = 0, arr[10000], count = 0;
 	ifstream input;
 	node_queue *ptr = end_ptr;
-	char c, simv;
+	char c = 'k', simv = 'k';
 
 	cout << "Хотите ли очистить файл от считанных данных?" << endl << "[1] Да." << endl << "[0] Нет." << endl;
 	cin >> flag;
@@ -184,6 +185,11 @@ void queue_keeper::read_from_file()
 			do
 			{
 				input >> simv;
+				if (simv == '_')
+				{
+					//struct of data is void 
+					break;
+				}
 				if (simv == '>')
 				{
 					//input >> simv;//for endl
@@ -241,7 +247,7 @@ void queue_keeper::read_from_file()
 					}
 				}
 			}
-			c == 'a';
+			c = 'a';
 			count = 0;
 		} while (!input.eof());
 
@@ -317,9 +323,9 @@ void queue_keeper::write_of_file()
 			}
 			fout << ptr->get_struct_of_data()->say_my_name();
 			//запись всех данных структуры данных
-			fout << "<";
+
 		    ptr->get_struct_of_data()->write_of_file(fout);
-			fout << ">";
+
 			//
 			fout << endl;
 			count--;

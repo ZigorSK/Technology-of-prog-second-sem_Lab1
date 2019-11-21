@@ -67,44 +67,55 @@ void deque::add(int data, int flag )//if flag, then add elem of right, else add 
 int deque::del(int flag)//flag = 1 - delete elem of right, flag = 0 - delete elem of left
 {
 	int d = 0;
-	if ((head->get_next_ptr() == nullptr) && (head->get_prev_ptr() == nullptr))// the last elem of deque
+	try
 	{
-		 d = head->get_data();
-		delete head;
-		head = nullptr;
-		cout << "Из дэка извлечён элемент" << d << endl;
-		system("pause");
-		return d;
-	}
+		if (head == nullptr)
+			throw flag;
 
-	//delete other elem
-	if (flag)//del rigtht elem
-	{
-		// ptr1-> ptr2
-		node_deque *ptr1 = head, *ptr2 = head;
-
-		while (ptr2->get_next_ptr() != nullptr)
+		if ((head->get_next_ptr() == nullptr) && (head->get_prev_ptr() == nullptr))// the last elem of deque
 		{
-			ptr2 = ptr2->get_next_ptr();
-			ptr1 = ptr2->get_prev_ptr();
+			d = head->get_data();
+			delete head;
+			head = nullptr;
+			cout << "Из дэка извлечён элемент " << d << endl;
+			system("pause");
+			return d;
 		}
-		d = ptr2->get_data();
-		delete ptr2;
-		ptr1->set_next_ptr(nullptr);
-		cout << "Из дэка извлечён элемент" << d << endl;
-		system("pause");
-		return d;
+
+			//delete other elem
+			if (flag)//del rigtht elem
+			{
+				// ptr1-> ptr2
+				node_deque *ptr1 = head, *ptr2 = head;
+
+				while (ptr2->get_next_ptr() != nullptr)
+				{
+					ptr2 = ptr2->get_next_ptr();
+					ptr1 = ptr2->get_prev_ptr();
+				}
+				d = ptr2->get_data();
+				delete ptr2;
+				ptr1->set_next_ptr(nullptr);
+				cout << "Из дэка извлечён элемент" << d << endl;
+				system("pause");
+				return d;
+			}
+			else//del left elem
+			{
+				node_deque *ptr = nullptr;
+				ptr = head->get_next_ptr();
+				d = head->get_data();
+				delete head;
+				head = ptr;
+				cout << "Из дэка извлечён элемент" << d << endl;
+				system("pause");
+				return d;
+			}
+		
 	}
-	else//del left elem
+	catch (int flag)
 	{
-		node_deque *ptr = nullptr;
-		ptr = head->get_next_ptr();
-		d = head->get_data();
-		delete head;
-		head = ptr;
-		cout << "Из дэка извлечён элемент" << d << endl;
-		system("pause");
-		return d;
+		cout << "В дэке больше нет элементов!!!" << endl;
 	}
 }
 
@@ -153,7 +164,6 @@ void deque::menu()
 			cout << "[1] Удаление элемента справа." << endl << "[0] Удаление элемента слева." << endl;
 			cin >> flag;
 			del(flag);
-			system("pause");
 			break;
 
 		case 3:
@@ -181,6 +191,8 @@ void deque::write_of_file(ofstream & fout)
 	{
 		if (ptr == nullptr)
 			throw(ptr);
+
+		fout << "<";
 		while (1)
 		{
 			fout << ptr->get_data();
@@ -189,12 +201,11 @@ void deque::write_of_file(ofstream & fout)
 				break;
 			fout << "|";
 		}
+		fout << ">";
 	}
 	catch (node_deque *ptr)
 	{
-		cout << "Вызвано исключение. Дэк пуст. В файл он записан не будет. Выполнение программы продолжится." << endl;
-		system("pause");
-		system("cls");
+		fout << "_";
 	}
 
 }

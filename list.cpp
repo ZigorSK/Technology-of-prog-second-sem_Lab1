@@ -93,9 +93,11 @@ int list::del(int pos)
 {
 	try
 	{
-		if ((size < pos) || (size < 1))
+		if ((pos > size) || (pos < 1))
 			throw pos;
+
 		int ret;
+		
 		if (head->get_next_ptr() != nullptr)
 		{
 			node_list *del_node = nullptr, *prev_node = nullptr, *next_node = nullptr;
@@ -206,7 +208,7 @@ void list::menu()
 			cout << "Введить позицию в списке, для удаления из него данного элемента" << endl;
 			cin >> pos;
 			del(pos);
-			system("pause");
+			system("cls");
 			break;
 
 		case 3:
@@ -234,6 +236,7 @@ void list::write_of_file(ofstream & fout)
 	{
 		if (ptr == nullptr)
 			throw(ptr);
+		fout << "<";
 		while (1)
 		{
 			fout << ptr->get_data();
@@ -242,12 +245,11 @@ void list::write_of_file(ofstream & fout)
 				break;
 			fout << "|";
 		}
+		fout << ">";
 	}
 	catch (node_list *ptr)
 	{
-		cout << "Вызвано исключение. Список пуст. В файл он записан не будет. Выполнение программы продолжится." << endl;
-		system("pause");
-		system("cls");
+		fout << "_";
 	}
 
 }
